@@ -320,6 +320,34 @@ async function handleAdmin(req: Request, env: Env, path: string): Promise<Respon
     });
   }
 
+  // Read-only WhatsApp check: token validity, test number status, template approval.
+  if (path === "/api/admin/whatsapp-check" && req.method === "GET") {
+    if (!env.WHATSAPP_TOKEN || !env.WHATSAPP_PHONE_NUMBER_ID) {
+      return json({ ok: false, error: "WHATSAPP_TOKEN / WHATSAPP_PHONE_NUMBER_ID not configured" });
+    }
+    const v = env.WHATSAPP_API_VERSION ?? "v25.0";
+    const graph = async (p: string) => {
+      try {
+        const r = await fetch(`https://graph.facebook.com/${v}/${p}`, {
+          headers: { Authorization: `Bearer ${env.WHATSAPP_TOKEN}` },
+          signal: AbortSignal.timeout(10000),
+        });
+        return { status: r.status, body: await r.json().catch(() => null) };
+      } catch (err) {
+        return { status: 0, body: { error: (err as Error).message } };
+      }
+    };
+    const phone = await graph(
+      `${env.WHATSAPP_PHONE_NUMBER_ID}?fields=display_phone_number,verified_name,quality_rating,code_verification_status`,
+    );
+    const template = env.WHATSAPP_WABA_ID
+      ? await graph(
+          `${env.WHATSAPP_WABA_ID}/message_templates?name=${encodeURIComponent(env.WHATSAPP_TEMPLATE_NAME ?? "travel_update")}&fields=name,status,category,language,rejected_reason`,
+        )
+      : null;
+    return json({ ok: phone.status === 200, mode: waMode(env), phone, template });
+  }
+
   if (path === "/api/admin/tracking" && req.method === "POST") {
     const b = (await readJson(req)) as { enabled?: boolean };
     if (typeof b.enabled !== "boolean") return json({ ok: false, error: "enabled must be boolean" }, 400);

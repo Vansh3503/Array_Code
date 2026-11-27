@@ -4,6 +4,7 @@ export interface Env {
   WHATSAPP_API_VERSION?: string;
   WHATSAPP_TEMPLATE_NAME?: string;
   WHATSAPP_TEMPLATE_LANG?: string;
+  WHATSAPP_WABA_ID?: string;
   PUBLIC_BASE_URL?: string;
   ALLOW_SIMULATED_TIME?: string;
   NOMINATIM_USER_AGENT?: string;

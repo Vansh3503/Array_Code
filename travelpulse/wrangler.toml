@@ -27,6 +27,8 @@ WHATSAPP_MODE = "dry_run"
 WHATSAPP_API_VERSION = "v25.0"
 WHATSAPP_TEMPLATE_NAME = "travel_update"
 WHATSAPP_TEMPLATE_LANG = "en"
+# WhatsApp Business Account ID (not secret) - used only by /api/admin/whatsapp-check
+WHATSAPP_WABA_ID = "923083587460658"
 # Public URL of this Worker, used for the live-tracking link inside messages.
 PUBLIC_BASE_URL = "https://travelpulse.vanshmalhotra353.workers.dev"
 # Only ever set to "true" in .dev.vars for local simulation with historic timestamps.
