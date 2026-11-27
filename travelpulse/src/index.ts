@@ -94,9 +94,12 @@ async function deliver(
   params: string[],
   isEmergency: boolean,
   now: number,
+  only?: string,
 ): Promise<Delivery[]> {
   const mode = waMode(env);
-  const recipients = parseRecipients(env.RECIPIENTS);
+  const recipients = parseRecipients(env.RECIPIENTS).filter(
+    (r) => !only || r.label.toLowerCase().startsWith(only.toLowerCase()),
+  );
   if (recipients.length === 0) return [{ label: "(none)", status: "failed", error: "RECIPIENTS secret not configured" }];
 
   // Individual messages, sent in parallel.
@@ -356,10 +359,12 @@ async function handleAdmin(req: Request, env: Env, path: string): Promise<Respon
   }
 
   if (path === "/api/admin/test-message" && req.method === "POST") {
+    // Optional {"only":"Vansh"} limits the test to recipients whose label starts with that text.
+    const { only } = (await readJson(req)) as { only?: string };
     const headline = `[TEST] TravelPulse is set up. You will receive ${cfg.traveler}'s travel updates here automatically.`;
     const params = [headline, "Setup test", "—", "—", "—", "—", cfg.itinerary[0]?.label ?? "—", "—", liveUrl(env)];
     const text = `✈️ Travel Update\n\n${headline}\n\nLive tracking: ${liveUrl(env)}`;
-    const deliveries = await deliver(env, null, text, params, false, now);
+    const deliveries = await deliver(env, null, text, params, false, now, typeof only === "string" ? only : undefined);
     return json({ ok: true, mode: waMode(env), deliveries });
   }
 
