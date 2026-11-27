@@ -1,0 +1,53 @@
+{
+  "traveler": "Vansh",
+  "homeTimezone": "Asia/Kolkata",
+  "homeLabel": "India time",
+  "homeFlag": "🇮🇳",
+  "places": [
+    { "id": "amd", "type": "airport", "name": "Ahmedabad Airport (AMD)", "code": "AMD", "lat": 23.0772, "lon": 72.6347, "radiusM": 2500, "city": "Ahmedabad", "country": "India", "countryCode": "IN", "tz": "Asia/Kolkata" },
+    { "id": "doh", "type": "airport", "name": "Hamad International Airport (DOH)", "code": "DOH", "lat": 25.2731, "lon": 51.6081, "radiusM": 3500, "city": "Doha", "country": "Qatar", "countryCode": "QA", "tz": "Asia/Qatar" },
+    { "id": "jfk", "type": "airport", "name": "JFK International Airport", "code": "JFK", "lat": 40.6413, "lon": -73.7781, "radiusM": 3000, "city": "New York", "country": "USA", "countryCode": "US", "tz": "America/New_York" },
+    { "id": "las", "type": "airport", "name": "Harry Reid International Airport (LAS)", "code": "LAS", "lat": 36.0840, "lon": -115.1537, "radiusM": 2500, "city": "Las Vegas", "country": "USA", "countryCode": "US", "tz": "America/Los_Angeles" },
+    { "id": "hotel_ti", "type": "hotel", "name": "Treasure Island Hotel, Las Vegas", "lat": 36.1247, "lon": -115.1721, "radiusM": 300, "city": "Las Vegas", "country": "USA", "countryCode": "US", "tz": "America/Los_Angeles" },
+    { "id": "bay_area", "type": "destination", "name": "San Francisco Bay Area", "lat": 37.6000, "lon": -122.2000, "radiusM": 65000, "country": "USA", "countryCode": "US", "tz": "America/Los_Angeles" },
+    { "id": "dublin_ca", "type": "destination", "name": "Dublin, California", "lat": 37.7022, "lon": -121.9358, "radiusM": 6000, "city": "Dublin", "country": "USA", "countryCode": "US", "tz": "America/Los_Angeles" },
+    { "id": "sfo", "type": "airport", "name": "San Francisco International Airport (SFO)", "code": "SFO", "lat": 37.6213, "lon": -122.3790, "radiusM": 3000, "city": "San Francisco", "country": "USA", "countryCode": "US", "tz": "America/Los_Angeles" },
+    { "id": "lhr", "type": "airport", "name": "London Heathrow Airport (LHR)", "code": "LHR", "lat": 51.4700, "lon": -0.4543, "radiusM": 3500, "city": "London", "country": "UK", "countryCode": "GB", "tz": "Europe/London" },
+    { "id": "del", "type": "airport", "name": "Delhi Airport (DEL)", "code": "DEL", "lat": 28.5562, "lon": 77.1000, "radiusM": 3500, "city": "New Delhi", "country": "India", "countryCode": "IN", "tz": "Asia/Kolkata" }
+  ],
+  "itinerary": [
+    { "label": "Ahmedabad (AMD)", "match": ["amd"], "scheduled": "Departs 29 Nov 2026" },
+    { "label": "Doha (DOH)", "match": ["doh"] },
+    { "label": "New York (JFK)", "match": ["jfk"] },
+    { "label": "Las Vegas (LAS)", "match": ["las"] },
+    { "label": "Treasure Island Hotel", "match": ["hotel_ti"] },
+    { "label": "San Francisco Bay Area", "match": ["bay_area", "sfo"] },
+    { "label": "Dublin, California", "match": ["dublin_ca"] },
+    { "label": "San Francisco (SFO) – return", "match": ["sfo"] },
+    { "label": "London (LHR)", "match": ["lhr"] },
+    { "label": "Delhi (DEL)", "match": ["del"] },
+    { "label": "Ahmedabad (AMD) – home", "match": ["amd"] }
+  ],
+  "rules": {
+    "lowBatteryPercent": 15,
+    "lowBatteryRearmPercent": 25,
+    "gapMinutes": 180,
+    "significantMoveKm": 50,
+    "newCityMinKm": 10,
+    "maxPlausibleSpeedKmh": 1300,
+    "maxAccuracyForGeofenceM": 2000,
+    "maxMessagesPerHour": 12,
+    "cooldownMinutes": {
+      "airport_arrival": 240,
+      "airport_departure": 240,
+      "hotel_arrival": 360,
+      "destination_arrival": 720,
+      "new_country": 720,
+      "new_city": 720,
+      "significant_move": 120,
+      "low_battery": 360,
+      "manual_checkin": 2,
+      "emergency": 1
+    }
+  }
+}

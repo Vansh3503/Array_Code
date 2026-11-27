@@ -1,0 +1,44 @@
+name = "travelpulse"
+main = "src/index.ts"
+compatibility_date = "2026-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Dashboard static files (HTML/CSS/JS/Leaflet). The Worker runs first so it
+# can enforce the private link before serving the page.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "travelpulse"
+# Replace after `npx wrangler d1 create travelpulse`
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+# Retry failed WhatsApp sends every 10 minutes (free on the Workers Free plan).
+[triggers]
+crons = ["*/10 * * * *"]
+
+[vars]
+# dry_run | template | text   (start with dry_run, switch to template once WhatsApp is set up)
+WHATSAPP_MODE = "dry_run"
+WHATSAPP_API_VERSION = "v25.0"
+WHATSAPP_TEMPLATE_NAME = "travel_update"
+WHATSAPP_TEMPLATE_LANG = "en"
+# Public URL of this Worker, used for the live-tracking link inside messages.
+PUBLIC_BASE_URL = "https://travelpulse.example.workers.dev"
+# Only ever set to "true" in .dev.vars for local simulation with historic timestamps.
+ALLOW_SIMULATED_TIME = "false"
+NOMINATIM_USER_AGENT = "TravelPulse/1.0 (personal travel tracker)"
+
+# Secrets (set with `npx wrangler secret put NAME`, never committed):
+#   DEVICE_TOKEN           - iPhone Shortcut bearer token
+#   VIEW_TOKENS            - comma-separated dashboard link tokens (first one is used in messages)
+#   ADMIN_TOKEN            - admin API token (pause tracking, test send, reset)
+#   RECIPIENTS             - "Mom:+919800000000,Dad:+919811111111"
+#   WHATSAPP_TOKEN         - permanent System User access token
+#   WHATSAPP_PHONE_NUMBER_ID
+#   WHATSAPP_APP_SECRET    - (optional) verifies delivery-status webhooks
+#   WHATSAPP_VERIFY_TOKEN  - (optional) webhook verification handshake

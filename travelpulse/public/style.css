@@ -1,0 +1,60 @@
+:root {
+  --bg: #f4f6fa;
+  --card: #ffffff;
+  --text: #1b2330;
+  --muted: #667085;
+  --accent: #1a73e8;
+  --ok: #1e8e3e;
+  --warn: #b26a00;
+  --warn-bg: #fff4e0;
+  --line: #e4e7ec;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #11151c;
+    --card: #1a2029;
+    --text: #e8ebf0;
+    --muted: #98a2b3;
+    --accent: #6ea8ff;
+    --ok: #5cc27a;
+    --warn: #ffb547;
+    --warn-bg: #3a2c12;
+    --line: #2b3340;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+header, main, footer { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+h1 { font-size: 1.25rem; margin: 18px 0 10px; }
+h2 { font-size: 1.05rem; margin: 0 0 10px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 14px; }
+.map-card { padding: 0; overflow: hidden; }
+.map-card p { padding: 8px 14px; margin: 0; }
+#map { height: 300px; width: 100%; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+.grid .wide { grid-column: 1 / -1; }
+.label { display: block; font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
+.value { font-size: 1.05rem; font-weight: 600; word-break: break-word; }
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+.banner { background: var(--warn-bg); color: var(--warn); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-weight: 600; }
+.journey { list-style: none; padding: 0; margin: 0; }
+.journey li { padding: 7px 0 7px 28px; position: relative; border-bottom: 1px solid var(--line); }
+.journey li:last-child { border-bottom: 0; }
+.journey li::before { content: "○"; position: absolute; left: 4px; color: var(--muted); }
+.journey li.reached::before { content: "✓"; color: var(--ok); }
+.journey li.current::before { content: "●"; color: var(--accent); }
+.journey li.current { font-weight: 700; }
+.journey li.not_confirmed::before { content: "–"; }
+.journey .sub { display: block; font-size: .8rem; color: var(--muted); font-weight: 400; }
+.events { list-style: none; padding: 0; margin: 0; }
+.events li { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.events li:last-child { border-bottom: 0; }
+.events time { display: block; font-size: .8rem; color: var(--muted); }
+footer { padding-bottom: 24px; }
+@media (max-width: 420px) { #map { height: 240px; } }
