@@ -61,6 +61,17 @@ describe("validation", () => {
     expect((await validatePing({ lat: 10, lon: 10, ts: "2026-11-29T10:30:00Z" }, now, false)).ok).toBe(false);
     expect((await validatePing({ lat: 10, lon: 10, ts: "2026-11-29T10:00:00" }, now, false)).ok).toBe(false); // no offset
   });
+  it("accepts a minimal Shortcut payload without ts (uses server time)", async () => {
+    const r = await validatePing({ lat: 36.1247, lon: -115.1721, battery: 55, trigger: "" }, now, false);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.ping.deviceTs).toBe(now);
+      expect(r.ping.trigger).toBe("manual");
+    }
+    const a = await validatePing({ lat: 36.1247, lon: -115.1721, battery: 55 }, now, false);
+    const b2 = await validatePing({ lat: 36.1247, lon: -115.1721, battery: 55 }, now + 5000, false);
+    expect(a.ok && b2.ok && a.ping.nonce === b2.ping.nonce).toBe(true); // same minute -> duplicate
+  });
   it("derives a deterministic nonce when none is sent (duplicate detection)", async () => {
     const b = { lat: 10, lon: 10, ts: "2026-11-29T10:00:00Z", battery: 50 };
     const a = await validatePing(b, now, false);

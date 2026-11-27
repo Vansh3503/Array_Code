@@ -61,9 +61,12 @@ export async function validatePing(
   if (lat < -90 || lat > 90 || lon < -180 || lon > 180) return { ok: false, error: "coordinates out of range" };
   if (Math.abs(lat) < 1e-6 && Math.abs(lon) < 1e-6) return { ok: false, error: "null-island coordinates rejected" };
 
-  const ts = parseDeviceTimestamp(b.ts ?? b.timestamp);
+  // ts is optional: Shortcuts can omit it and the server receive time is used instead.
+  const rawTs = b.ts ?? b.timestamp;
+  const tsProvided = rawTs !== undefined && rawTs !== null && rawTs !== "";
+  const ts = tsProvided ? parseDeviceTimestamp(rawTs) : { ms: nowMs, offsetMin: null };
   if (!ts) return { ok: false, error: "ts must be ISO 8601 with timezone offset (e.g. 2026-11-29T15:30:00+05:30)" };
-  if (!allowSimulatedTime) {
+  if (tsProvided && !allowSimulatedTime) {
     if (ts.ms < nowMs - MAX_PAST_MS) return { ok: false, error: "timestamp too old (possible replay)" };
     if (ts.ms > nowMs + MAX_FUTURE_MS) return { ok: false, error: "timestamp is in the future" };
   }
@@ -87,7 +90,8 @@ export async function validatePing(
   const rawNonce = text(b.nonce ?? b.id, 100);
   const nonce = rawNonce
     ? `n:${rawNonce}`
-    : `h:${await sha256Hex(`${ts.ms}|${lat.toFixed(6)}|${lon.toFixed(6)}|${trigger}|${battery}`)}`;
+    : // Without ts, identical submissions within the same minute are treated as duplicates.
+      `h:${await sha256Hex(`${tsProvided ? ts.ms : Math.floor(nowMs / 60000)}|${lat.toFixed(6)}|${lon.toFixed(6)}|${trigger}|${battery}`)}`;
 
   return {
     ok: true,
