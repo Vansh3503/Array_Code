@@ -44,6 +44,7 @@ After that:
 | `wrangler.toml` `[vars]` | `WHATSAPP_MODE` (`dry_run` / `template` / `text`), API version, template name and language, `PUBLIC_BASE_URL` |
 | Secrets (`wrangler secret put`) | `DEVICE_TOKEN`, `VIEW_TOKENS`, `ADMIN_TOKEN`, `RECIPIENTS`, `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`, and optionally `WHATSAPP_APP_SECRET` and `WHATSAPP_VERIFY_TOKEN` |
 | `migrations/0001_init.sql` | Database schema |
+| `public/` | Dashboard files. `scripts/build-assets.mjs` embeds them into the Worker (`src/assets.gen.ts`) automatically before every `wrangler dev` / `wrangler deploy`, so everything ships as one Worker. |
 
 Recipient format: `RECIPIENTS="Mom:+9198XXXXXXXX,Dad:+9198XXXXXXXX"`. Phone numbers stay in this secret. The database and API responses only contain labels and the last 3 digits.
 

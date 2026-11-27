@@ -1,4 +1,5 @@
 import tripJson from "../trip.json";
+import { ASSETS } from "./assets.gen";
 import type { EnrichedPing, Env, TrackerState, TravelEvent, TripConfig } from "./types";
 import { validatePing, sha256Hex } from "./validate";
 import { placesContaining, flagEmoji, shortCountryName } from "./geo";
@@ -409,6 +410,13 @@ async function retryFailed(env: Env): Promise<void> {
     .run();
 }
 
+function serveAsset(path: string, headers: Record<string, string>): Response {
+  const a = ASSETS[path];
+  if (!a) return new Response("Not found", { status: 404 });
+  const bytes = Uint8Array.from(atob(a.b64), (c) => c.charCodeAt(0));
+  return new Response(bytes, { headers: { "Content-Type": a.type, ...headers } });
+}
+
 // ---------- router ----------
 
 export default {
@@ -441,14 +449,13 @@ export default {
         if (!(await isViewToken(env, m[1]))) {
           return new Response("This tracking link is invalid or has been revoked.", { status: 404, headers: SECURITY_HEADERS });
         }
-        const page = await env.ASSETS.fetch(new Request(new URL("/", url)));
-        const headers = new Headers(page.headers);
-        for (const [k, v] of Object.entries(SECURITY_HEADERS)) headers.set(k, v);
-        return new Response(page.body, { status: page.status, headers });
+        return serveAsset("/index.html", SECURITY_HEADERS);
       }
 
       // Public static assets (no data inside them).
-      if (req.method === "GET" && /^\/(app\.js|style\.css|vendor\/.+)$/.test(path)) return env.ASSETS.fetch(req);
+      if (req.method === "GET" && /^\/(app\.js|style\.css|vendor\/.+)$/.test(path) && ASSETS[path]) {
+        return serveAsset(path, { "Cache-Control": "public, max-age=300", "X-Content-Type-Options": "nosniff" });
+      }
 
       return new Response("Not found", { status: 404, headers: SECURITY_HEADERS });
     } catch (err) {

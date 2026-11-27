@@ -8,7 +8,7 @@
     "deploy": "wrangler deploy",
     "db:migrate:local": "wrangler d1 migrations apply travelpulse --local",
     "db:migrate:remote": "wrangler d1 migrations apply travelpulse --remote",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "node scripts/build-assets.mjs && tsc --noEmit",
     "test": "vitest run",
     "simulate": "node scripts/simulate.mjs"
   },

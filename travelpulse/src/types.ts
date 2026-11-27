@@ -1,6 +1,5 @@
 export interface Env {
   DB: D1Database;
-  ASSETS: Fetcher;
   WHATSAPP_MODE?: string;
   WHATSAPP_API_VERSION?: string;
   WHATSAPP_TEMPLATE_NAME?: string;
