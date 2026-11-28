@@ -23,7 +23,7 @@ crons = ["*/10 * * * *"]
 
 [vars]
 # dry_run | template | text   (start with dry_run, switch to template once WhatsApp is set up)
-WHATSAPP_MODE = "dry_run"
+WHATSAPP_MODE = "template"
 WHATSAPP_API_VERSION = "v25.0"
 WHATSAPP_TEMPLATE_NAME = "travel_update"
 WHATSAPP_TEMPLATE_LANG = "en"
