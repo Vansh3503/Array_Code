@@ -47,7 +47,17 @@ export async function reverseGeocode(env: Env, lat: number, lon: number): Promis
     };
     const a = d.address ?? {};
     return {
-      city: a.city ?? a.town ?? a.village ?? a.municipality ?? a.county ?? a.state ?? null,
+      // Prefer a real city/town; outside city limits use the district (e.g. "Ahmedabad")
+      // rather than sub-district names like "Sabarmati Taluka".
+      city:
+        a.city ??
+        a.town ??
+        a.village ??
+        a.municipality ??
+        a.state_district?.replace(/\s+District$/i, "") ??
+        a.county ??
+        a.state ??
+        null,
       country: a.country ?? null,
       countryCode: a.country_code ? a.country_code.toUpperCase() : null,
     };
