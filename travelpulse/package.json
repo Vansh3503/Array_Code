@@ -1,0 +1,21 @@
+{
+  "name": "travelpulse",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate:local": "wrangler d1 migrations apply travelpulse --local",
+    "db:migrate:remote": "wrangler d1 migrations apply travelpulse --remote",
+    "typecheck": "node scripts/build-assets.mjs && tsc --noEmit",
+    "test": "vitest run",
+    "simulate": "node scripts/simulate.mjs"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261127.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.7",
+    "wrangler": "^4.169.0"
+  }
+}

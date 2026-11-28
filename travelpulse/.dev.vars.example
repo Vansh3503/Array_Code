@@ -1,0 +1,12 @@
+# Copy to .dev.vars for `npm run dev` (never commit .dev.vars)
+DEVICE_TOKEN=dev-device-token-1234567890
+VIEW_TOKENS=dev-view-token-abcdefghij
+ADMIN_TOKEN=dev-admin-token-1234567890
+RECIPIENTS=Mom:+919800000000,Dad:+919811111111
+# Lets the simulator send historic timestamps. NEVER set this in production.
+ALLOW_SIMULATED_TIME=true
+PUBLIC_BASE_URL=http://localhost:8787
+# Uncomment to send real messages from local dev:
+# WHATSAPP_MODE=template
+# WHATSAPP_TOKEN=
+# WHATSAPP_PHONE_NUMBER_ID=

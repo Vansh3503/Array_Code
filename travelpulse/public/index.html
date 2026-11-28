@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin">
+  <meta name="robots" content="noindex, nofollow">
+  <title>TravelPulse</title>
+  <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <h1>✈️ <span id="traveler">Travel</span> — TravelPulse</h1>
+    <div id="banner" class="banner" hidden></div>
+  </header>
+
+  <main>
+    <section class="card map-card">
+      <div id="map" aria-label="Map of last confirmed location"></div>
+      <p class="muted small" id="map-caption">Waiting for data…</p>
+    </section>
+
+    <section class="card grid">
+      <div><span class="label">Location</span><span class="value" id="loc">—</span></div>
+      <div><span class="label">Local time</span><span class="value" id="local">—</span></div>
+      <div><span class="label" id="home-label">India time</span><span class="value" id="home">—</span></div>
+      <div><span class="label">Battery</span><span class="value" id="battery">—</span></div>
+      <div><span class="label">Weather</span><span class="value" id="weather">—</span></div>
+      <div><span class="label">Last updated</span><span class="value" id="updated">—</span></div>
+      <div class="wide"><span class="label">Upcoming destination</span><span class="value" id="next">—</span></div>
+    </section>
+
+    <section class="card">
+      <h2>Journey</h2>
+      <ol id="journey" class="journey"></ol>
+      <p class="muted small">Progress only advances when the phone confirms a location. Scheduled times are never treated as arrivals.</p>
+    </section>
+
+    <section class="card">
+      <h2>Recent updates</h2>
+      <ul id="events" class="events"><li class="muted">No updates yet.</li></ul>
+    </section>
+  </main>
+
+  <footer class="muted small">Refreshes every 30 seconds · <span id="refreshed"></span></footer>
+
+  <script src="/vendor/leaflet/leaflet.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
