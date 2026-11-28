@@ -133,6 +133,9 @@ async function handlePing(req: Request, env: Env): Promise<Response> {
   const v = await validatePing(body, now, env.ALLOW_SIMULATED_TIME === "true");
   if (!v.ok) return json({ ok: false, error: v.error, summary: `❌ Rejected: ${v.error}` }, 422);
   const ping = v.ping;
+  // Test pings may be limited to recipients whose label starts with `only` (e.g. "Vansh").
+  const raw = body as Record<string, unknown>;
+  const only = ping.isTest && typeof raw.only === "string" && raw.only.trim() ? raw.only.trim() : undefined;
 
   if (!(await trackingEnabled(env.DB)) && ping.trigger !== "emergency") {
     return json({ ok: true, accepted: false, summary: "⏸️ Tracking is paused. Nothing was recorded." });
@@ -187,7 +190,7 @@ async function handlePing(req: Request, env: Env): Promise<Response> {
     } else if (onlyMinor && result.suspect) {
       skipped = "suspect location";
     } else {
-      deliveries = await deliver(env, pingId, msg.text, msg.params, msg.isEmergency, now);
+      deliveries = await deliver(env, pingId, msg.text, msg.params, msg.isEmergency, now, only);
     }
   }
 

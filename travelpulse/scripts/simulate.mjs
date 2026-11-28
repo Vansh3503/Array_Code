@@ -23,6 +23,7 @@ const TOKEN = process.env.DEVICE_TOKEN;
 const LIVE = flag("live");
 const DELAY = Number(opt("delay", LIVE ? "8" : "0.3")) * 1000;
 const ONLY_ARRIVALS = flag("arrivals-only");
+const ONLY = opt("only", undefined); // e.g. --only Vansh : deliver test messages to that recipient only
 if (!TOKEN) {
   console.error("Set DEVICE_TOKEN in the environment.");
   process.exit(1);
@@ -59,6 +60,7 @@ async function send(label, payload, tsMs) {
     ts: isoWithOffset(tsMs, offset),
     nonce: `sim-${tsMs}-${Math.random().toString(36).slice(2, 8)}`,
     test: LIVE, // production runs are labelled [TEST]
+    ...(ONLY ? { only: ONLY } : {}),
   };
   const res = await fetch(`${URL_BASE}/api/ping`, {
     method: "POST",
